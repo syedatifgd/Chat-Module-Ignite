@@ -152,7 +152,7 @@ export default class RegisterScreen extends Component {
     return (
       <View style={styles.viewStyle}>
         <KeyboardAwareScrollView style={styles.regForm} resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={true} automaticallyAdjustContentInsets={false} keyboardShouldPersistTaps="always" showsVerticalScrollIndicator={false}>
-          <Text style={styles.textStyle}></Text>
+        <Text style={styles.textStyle}></Text>
           <TextInput style={[styles.textInput, !this.state.namevalidation ? styles.error : null]} placeholder="Name" underlineColorAndroid={'transparent'} onChangeText={(text) => this.getname(text)} value={this.state.name}></TextInput>
           <TextInput style={[styles.textInput, !this.state.validated ? styles.error : null]} placeholder="Email" underlineColorAndroid={'transparent'} keyboardType={'email-address'}
             autoCapitalize={'none'} autoCorrect={false} onChangeText={(text) => this.validate(text)}
@@ -164,8 +164,7 @@ export default class RegisterScreen extends Component {
             <Text style={styles.btnText}> SIGN UP </Text>
           </TouchableOpacity>
           <View style={styles.inlineComp}>
-            <Text style={styles.donthaveaccount} onPress={() => this.props.navigation.navigate('LoginScreen')}>Already have an account?</Text>
-            <Text style={styles.donthaveaccount} onPress={() => this.props.navigation.navigate('LoginScreen')}>Login</Text>
+            <Text style={styles.donthaveaccount} onPress={() => this.props.navigation.navigate('LoginScreen')}>Already have an account? <Text style={styles.donthaveaccountinnertext}>Login</Text> </Text>
           </View>
         </KeyboardAwareScrollView>
       </View>

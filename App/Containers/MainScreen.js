@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { ScrollView, Text, KeyboardAvoidingView, View } from 'react-native'
 import { TabNavigator, TabBarBottom } from "react-navigation";
 
+
 // Add Actions - replace 'Your' with whatever your reducer is called :)
 // import YourActions from '../Redux/YourRedux'
 

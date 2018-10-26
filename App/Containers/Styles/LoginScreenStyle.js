@@ -54,11 +54,16 @@ export default StyleSheet.create({
   },
   donthaveaccount: {
     alignSelf: 'stretch',
-    marginTop: 40,
+    marginTop: 25,
     color: '#2699FB',
   },
+  donthaveaccountinnertext :{
+    color: '#2699FB',
+    fontWeight : 'bold',
+  },
   inlineComp: {
+    alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'center'
   }
 })

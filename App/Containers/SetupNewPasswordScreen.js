@@ -40,21 +40,22 @@ export default class SetupNewPasswordScreen extends Component {
     this.setState({ confirmpassword: text })
   }
   resetPasswordPressed = () => {
-    this.setState({ passwordvalidation: true })
-    this.setState({ confirmpasswordvalidation: true })
     const { navigation } = this.props;
     const userEmail = navigation.getParam('userEmail');
     const api = API.create();
     let passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
-    if (this.state.password != null || this.state.confirmpassword !=null) {
-      if (this.state.password != this.state.confirmpassword) {
-        ToastAndroid.show('Password does not match', ToastAndroid.LONG);
-      }
-      else {
-        if (passwordRegex.test(this.state.password) === false) {
-          ToastAndroid.show('Password must contain: One uppercase and lowercase character followed by atleast 1 number and special character with minimum of 8 characters in total');
+    if (this.state.password != '' && this.state.confirmpassword !='') {
+      this.setState({ passwordvalidation: true });
+      this.setState({ confirmpasswordvalidation: true });
+      if (this.state.password === this.state.confirmpassword) {
+        const testPass = passwordRegex.test(this.state.password);
+        if(testPass === false){
+          ToastAndroid.show('Password must contain: One uppercase and lowercase character followed by atleast 1 number and special character with minimum of 8 characters in total', ToastAndroid.LONG);
+          this.setState({ passwordvalidation: false });
+          this.setState({ confirmpasswordvalidation: false });
+          return false;
         }
-        else {
+        else{
           api.newPasswordSetup(userEmail, this.state.password)
           .then(response => {
             if (response.status == 200) {
@@ -75,6 +76,36 @@ export default class SetupNewPasswordScreen extends Component {
             ToastAndroid.show('There was an error, please check your input and try again', ToastAndroid.LONG);
           })
         }
+        // if (passwordRegex.test(this.state.password) === false) {
+        //   ToastAndroid.show('Password must contain: One uppercase and lowercase character followed by atleast 1 number and special character with minimum of 8 characters in total');
+        //   this.setState({ passwordvalidation: false });
+        //   this.setState({ confirmpasswordvalidation: false });
+        //   return false;
+        // }
+        // else {
+        //   api.newPasswordSetup(userEmail, this.state.password)
+        //   .then(response => {
+        //     if (response.status == 200) {
+        //       Alert.alert(
+        //         'Password Reset',
+        //         'Your password was changed successfully',
+        //         [
+        //           { text: 'OK', onPress: () => this.resetNavigation('LoginScreen') },
+        //         ],
+        //         { cancelable: false }
+        //       )
+        //     }
+        //     else {
+        //       ToastAndroid.show('There was an error, please check your input and try again', ToastAndroid.LONG);
+        //     }
+        //   })
+        //   .catch(error => {
+        //     ToastAndroid.show('There was an error, please check your input and try again', ToastAndroid.LONG);
+        //   })
+        // }
+      }
+      else {
+        ToastAndroid.show('Password does not match', ToastAndroid.LONG);
       }
     }
     else {

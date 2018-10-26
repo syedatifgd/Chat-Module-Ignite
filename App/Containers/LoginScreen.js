@@ -4,7 +4,7 @@ import { Alert } from 'react-native'
 import { ToastAndroid } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import axios from 'axios'
-import  API  from "../Services/Api";
+import API from "../Services/Api";
 import { NavigationActions } from 'react-navigation';
 
 
@@ -24,7 +24,7 @@ export default class LoginScreen extends Component {
       password: '',
       validated: true,
       passwordvalidation: true,
-      userToken : ''
+      userToken: ''
     };
   }
   resetNavigation(targetRoute) {
@@ -36,10 +36,10 @@ export default class LoginScreen extends Component {
     });
     this.props.navigation.dispatch(resetAction);
   }
-  componentDidMount(){
-    // if(this.state.userToken != null){
-    //   this.resetNavigation('HomeScreen');
-    // }
+  componentDidMount() {
+    if(this.state.userToken != null){
+      this.resetNavigation('HomeScreen');
+    }
   }
   validate = (text) => {
     this.setState({ email: text })
@@ -52,61 +52,54 @@ export default class LoginScreen extends Component {
     if (this.state.email != '' && this.state.password != '') {
       this.setState({ validated: true });
       this.setState({ passwordvalidation: true });
-      if (reg.test(this.state.email) === false) {
-        ToastAndroid.show('Please enter a valid email address and try again', ToastAndroid.LONG);
-        this.setState({ validated: false });
-        return false;
-      }
-      else {
-        this.setState({ validated: true });
-        const api = API.create();
-        api.postLogin(this.state.email,this.state.password)
-          .then(response => {
-            if (response.status == 200) {
-              console.log(response);
-              if(response.data.data.userEmail == 'Unverified'){
-                Alert.alert(
-                  'Email Unverified',
-                  'Please verify your email before logging in.',
-                  [
-                    {
-                      text: 'Resend Email', 
-                      onPress: () => {
-                        api.registrationtoken(this.state.email)
-                          .then(response => {
-                            if(response.status == 200){
-                              ToastAndroid.show('Email sent successfully', ToastAndroid.LONG);
-                            }
-                          })
-                          .catch(error => {
-                            ToastAndroid.show('There was an error sending the email, try again later', ToastAndroid.LONG);
-                          });
-                      }
-                    },
-                    {text: 'OK', onPress: () => console.log('OK Pressed')},
-                  ],
-                  { cancelable: false }
-                )
-              }
-              else{
-                this.setState({ userToken: response.data.token });
-                //this.props.navigation.navigate('HomeScreen');
-                this.resetNavigation('HomeScreen');
-              }
+      this.setState({ validated: true });
+      const api = API.create();
+      api.postLogin(this.state.email, this.state.password)
+        .then(response => {
+          if (response.status == 200) {
+            console.log(response);
+            if (response.data.data.userEmail == 'Unverified') {
+              Alert.alert(
+                'Email Unverified',
+                'Please verify your email before logging in.',
+                [
+                  {
+                    text: 'Resend Email',
+                    onPress: () => {
+                      api.registrationtoken(this.state.email)
+                        .then(response => {
+                          if (response.status == 200) {
+                            ToastAndroid.show('Email sent successfully', ToastAndroid.LONG);
+                          }
+                        })
+                        .catch(error => {
+                          ToastAndroid.show('There was an error sending the email, try again later', ToastAndroid.LONG);
+                        });
+                    }
+                  },
+                  { text: 'OK', onPress: () => console.log('OK Pressed') },
+                ],
+                { cancelable: false }
+              )
             }
-            else{
-              ToastAndroid.show('Invalid credentials, please check your input or signup to continue', ToastAndroid.LONG);
-              this.setState({ validated: false });
-              this.setState({ passwordvalidation: false });
+            else {
+              this.setState({ userToken: response.data.token });
+              //this.props.navigation.navigate('HomeScreen');
+              this.resetNavigation('HomeScreen');
             }
-            console.log(response.status);
-          })
-          .catch(error => {
+          }
+          else {
             ToastAndroid.show('Invalid credentials, please check your input or signup to continue', ToastAndroid.LONG);
             this.setState({ validated: false });
             this.setState({ passwordvalidation: false });
-          });
-      }
+          }
+          console.log(response.status);
+        })
+        .catch(error => {
+          ToastAndroid.show('Invalid credentials, please check your input or signup to continue', ToastAndroid.LONG);
+          this.setState({ validated: false });
+          this.setState({ passwordvalidation: false });
+        });
     }
     else {
       ToastAndroid.show('One of the fields are empty or not set properly', ToastAndroid.LONG);
@@ -119,13 +112,13 @@ export default class LoginScreen extends Component {
     }
   }
 
-  render () {
+  render() {
     return (
       <View style={styles.divStyle}>
         <KeyboardAwareScrollView style={styles.logForm} resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={true} automaticallyAdjustContentInsets={false} keyboardShouldPersistTaps="always" showsVerticalScrollIndicator={false}>
           <Text style={styles.textStyle}> LOGIN
             </Text>
-          <TextInput style={[styles.textInput, !this.state.validated ? styles.error : null]} placeholder="Email" underlineColorAndroid={'transparent'} keyboardType={'email-address'}
+          <TextInput style={[styles.textInput, !this.state.validated ? styles.error : null]} placeholder="Username or Email" underlineColorAndroid={'transparent'} keyboardType={'email-address'}
             autoCapitalize={'none'} autoCorrect={false} onChangeText={(text) => this.validate(text)}
             value={this.state.email}></TextInput>
           <TextInput style={[styles.textInput, !this.state.passwordvalidation ? styles.error : null]} placeholder="Password" underlineColorAndroid={'transparent'} secureTextEntry={true} onChangeText={(text) => this.getpassword(text)} value={this.state.password} maxLength={25} autoCapitalize={'none'} autoCorrect={false}></TextInput>
@@ -134,8 +127,7 @@ export default class LoginScreen extends Component {
           </TouchableOpacity>
           <Text style={styles.forgotpass} onPress={() => this.props.navigation.navigate('ForgotPasswordScreen')}>Forgot Password</Text>
           <View style={styles.inlineComp}>
-            <Text style={styles.donthaveaccount}>Don't have an account?</Text>
-            <Text style={styles.donthaveaccount} onPress={() => this.props.navigation.navigate('RegisterScreen')}>Sign up</Text>
+            <Text style={styles.donthaveaccount} onPress={() => this.props.navigation.navigate('RegisterScreen')}>Don't have an account? <Text style={styles.donthaveaccountinnertext}>Sign up</Text></Text>
           </View>
         </KeyboardAwareScrollView>
       </View>

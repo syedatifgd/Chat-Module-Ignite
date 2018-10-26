@@ -11,8 +11,8 @@ export default StyleSheet.create({
     backgroundColor: 'white'
   },
   textStyle: {
-    paddingTop: 10,
-    paddingBottom: 15,
+    paddingTop: 5,
+    paddingBottom: 10,
   },
   regForm: {
     alignSelf: 'stretch',
@@ -42,11 +42,16 @@ export default StyleSheet.create({
   },
   donthaveaccount: {
     alignSelf: 'stretch',
-    marginTop: 40,
+    marginTop: 20,
     color: '#2699FB',
   },
+  donthaveaccountinnertext :{
+    color: '#2699FB',
+    fontWeight : 'bold',
+  },
   inlineComp: {
+    alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between'
+    justifyContent: 'center',
   }
 })
